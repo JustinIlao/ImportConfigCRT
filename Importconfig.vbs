@@ -20,17 +20,19 @@ Sub main
     'Object file to read is created
     Set objFileToRead = CreateObject("Scripting.FileSystemObject")
     Set strFileText = objFileToRead.OpenTextFile(TxtFile,1)
-
+    
+    
+    crt.Screen.Send chr(8) & chr(13)
+    
     'Send conf t to enter configuration mode
-    crt.Screen.Send "conf t" & vbCrLf
-
+    If Not (crt.Screen.WaitForString("(config)#", 1)) Then
+        crt.Screen.Send "conf t" & vbCrLf
+    End If
 
     'If conf t is sent in privilege level 0, then send enable command first
     If (crt.Screen.WaitForString ("% Invalid input detected at '^' marker.", 1)) Then 
-        crt.Screen.Send "en"
-        crt.Screen.Send chr(13) & vbCrLf
-        crt.Screen.Send "conf t"
-        crt.Screen.Send chr(13) & vbCrLf
+        crt.Screen.Send "en" & vbCrLf
+        crt.Screen.Send "conf t" & vbCrLf
     End If
 
     
